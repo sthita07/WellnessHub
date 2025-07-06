@@ -1,0 +1,4 @@
+client/.env
+server/.env
+client/.gitignore
+server/.gitignore
