@@ -1,10 +1,14 @@
-import React, { useState } from "react";
-import axios from "../api/axios"; // ✅ Correct
-
+import { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Signup = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+export default function Signup() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -14,53 +18,63 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/auth/register", formData);
-      const { token } = response.data;
-      localStorage.setItem("token", token);
-      navigate("/dashboard");
-    } catch (error) {
-      console.error(
-        "Registration failed:",
-        error.response?.data?.message || error.message
-      );
+      const res = await axios.post("http://localhost:3000/api/auth/register", formData);
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        navigate("/login");
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
   return (
-    <div>
-      <h2>Signup</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-primary via-accent to-secondary">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-2xl rounded-xl p-8 w-full max-w-md"
+      >
+        <h2 className="text-3xl font-bold text-center text-primary mb-6">
+          Create an Account
+        </h2>
+
         <input
           type="text"
           name="name"
-          placeholder="Name"
+          placeholder="Full Name"
           value={formData.name}
           onChange={handleChange}
+          className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
-        <br />
+
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder="Email Address"
           value={formData.email}
           onChange={handleChange}
+          className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
-        <br />
+
         <input
           type="password"
           name="password"
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+          className="w-full p-3 mb-6 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
-        <br />
-        <button type="submit">Register</button>
+
+        <button
+          type="submit"
+          className="w-full bg-primary text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300"
+        >
+          Sign Up
+        </button>
       </form>
     </div>
   );
-};
-
-export default Signup;
+}

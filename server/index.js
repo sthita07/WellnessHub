@@ -11,21 +11,19 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors());
 
+// Correctly importing routes
+const authRoutes = require('./routes/authRoutes');
+const journalRoutes = require('./routes/journalRoutes.js');
+const chatbotRoutes = require('./routes/chatbotRoutes.js'); // <-- Added chatbot route import
+
+// Using them with proper base paths
+app.use('/api/auth', authRoutes);
+app.use('/api/journal', journalRoutes);
+app.use('/api/chatbot', chatbotRoutes); // <-- Added chatbot route usage
 
 const port = 3000;
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
-
-
-
-
- //Correctly importing routes
-const authRoutes = require('./routes/authRoutes');
-const journalRoutes = require('./routes/journalRoutes.js');
-
-// Using them with proper base paths
-app.use('/api/auth', authRoutes);
-app.use('/api/journal', journalRoutes);
 
 //const models = require('./models/User.js');
