@@ -1,29 +1,27 @@
 require('dotenv').config();
 const express = require('express');
-const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const connectDB = require('./config/db.js');
+const cors = require('cors');
+
+// Connect DB
 connectDB();
 
-dotenv.config();
 const app = express();
-const cors = require('cors');
 app.use(express.json());
 app.use(cors());
 
-// Correctly importing routes
+// Routes
 const authRoutes = require('./routes/authRoutes');
 const journalRoutes = require('./routes/journalRoutes.js');
-const chatbotRoutes = require('./routes/chatbotRoutes.js'); // <-- Added chatbot route import
+const chatbotRoutes = require('./routes/chatbotRoutes.js');
 
-// Using them with proper base paths
 app.use('/api/auth', authRoutes);
 app.use('/api/journal', journalRoutes);
-app.use('/api/chatbot', chatbotRoutes); // <-- Added chatbot route usage
+app.use('/api/chatbot', chatbotRoutes);
 
-const port = 3000;
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+// Use dynamic PORT (Render requirement)
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
-
-//const models = require('./models/User.js');
